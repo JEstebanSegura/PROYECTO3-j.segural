@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Venta Exitosa</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #d4edda;
+        }
+        h1 {
+            color: #28a745;
+            margin-top: 20px;
+        }
+        .message {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border: 1px solid #28a745;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        .btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 20px;
+            display: inline-block;
+        }
+        .btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h1>¡Venta Exitosa!</h1>
+    <div class="message">
+        <p>El producto ha sido vendido con éxito.</p>
+        <p><strong>Detalles de la Venta:</strong></p>
+        <ul>
+            <li><strong>Producto:</strong> {{ product.name }}</li>
+            <li><strong>Precio de Venta:</strong> {{ product.selling_price }} €</li>
+            <li><strong>Tipo de Producto:</strong> {{ product.product_type }}</li>
+            <li><strong>Cantidad Vendida:</strong> 1</li>
+            <li><strong>Total de la Venta:</strong> {{ product.selling_price }} €</li>
+        </ul>
+
+        <p><strong>Ingredientes del Producto:</strong></p>
+        <ul>
+            {% for ingredient in product.ingredients %}
+                <li>{{ ingredient.name }} ({{ ingredient.inventory }} disponibles)</li>
+            {% endfor %}
+        </ul>
+        
+        <p>Los ingredientes han sido actualizados en el inventario.</p>
+        <a href="/index" class="btn">Volver a la tienda</a>
+    </div>
+</body>
+</html>

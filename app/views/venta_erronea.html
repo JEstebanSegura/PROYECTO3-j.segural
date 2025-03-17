@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Error en la Venta</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f8d7da;
+        }
+        h1 {
+            color: #dc3545;
+            margin-top: 20px;
+        }
+        .message {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border: 1px solid #dc3545;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        .btn {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 20px;
+            display: inline-block;
+        }
+        .btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <h1>¡Error en la Venta!</h1>
+    <div class="message">
+        <p><strong>Lo sentimos, pero no pudimos completar la venta.</strong></p>
+        <p>El inventario de los ingredientes necesarios para completar la venta es insuficiente.</p>
+
+        <p><strong>Producto:</strong> {{ product.name }}</p>
+        <p><strong>Precio de Venta:</strong> {{ product.selling_price }} €</p>
+
+        <p><strong>Ingredientes del Producto:</strong></p>
+        <ul>
+            {% for ingredient in product.ingredients %}
+                <li>{{ ingredient.name }} ({{ ingredient.inventory }} disponibles)</li>
+            {% endfor %}
+        </ul>
+
+        <p><strong>Ingredientes faltantes:</strong></p>
+        <ul>
+            {% if ingredientes_faltantes %}
+                {% for ingredient in ingredientes_faltantes %}
+                    <li>{{ ingredient }}</li>
+                {% endfor %}
+            {% else %}
+                <li>Todos los ingredientes están disponibles.</li>
+            {% endif %}
+        </ul>
+
+        <p>Por favor, reponga el inventario de los ingredientes faltantes y vuelva a intentar.</p>
+        <a href="/ingredients" class="btn">Ver Inventario</a>
+        <a href="/index" class="btn">Volver a la tienda</a>
+    </div>
+</body>
+</html>

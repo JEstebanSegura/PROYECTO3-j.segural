@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Agregar Ingrediente</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            width: 320px;
+            margin: auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        label {
+            font-weight: bold;
+            color: #d63384;
+            display: block;
+            margin-top: 10px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 2px solid #d63384;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #d63384;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #b02a70;
+        }
+        a {
+            display: block;
+            margin-top: 15px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        #flavor_field {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Agregar Ingrediente</h1>
+    <form action="/ingredients/add" method="POST">
+        <label>Nombre del ingrediente:</label>
+        <input type="text" name="name" required><br>
+
+        <label>Precio:</label>
+        <input type="text" name="price" required><br>
+
+        <label>Calorías:</label>
+        <input type="text" name="calories" required><br>
+
+        <label>Inventario:</label>
+        <input type="text" name="inventory" required><br>
+
+        <label>¿Es vegetariano?</label>
+        <select name="is_vegetarian" required>
+            <option value="1">Sí</option>
+            <option value="0">No</option>
+        </select><br>
+
+        <label>Tipo de ingrediente:</label>
+        <select name="ingredient_type" id="ingredient_type" required onchange="document.getElementById('flavor_field').style.display = this.value === 'Base' ? 'block' : 'none';">
+            <option value="">Seleccione...</option>
+            <option value="Base">Base</option>
+            <option value="Topping">Topping</option>
+        </select><br>
+
+        <div id="flavor_field">
+            <label>Sabor:</label>
+            <input type="text" name="flavor"><br>
+        </div>
+
+        <button type="submit">Agregar</button>
+    </form>
+
+    <a href="/index" class="btn">Inicio</a> <!-- Botón de Inicio -->
+    <a href="/ingredients/" class="btn">Ver ingredientes</a>
+</body>
+</html>

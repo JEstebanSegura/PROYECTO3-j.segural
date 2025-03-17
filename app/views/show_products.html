@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Heladería</title>
+    <title>Lista de Productos</title>
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -46,21 +46,10 @@
         .btn:hover {
             background-color: #b02a70;
         }
-        .btn-sell {
-            background-color: #28a745;
-        }
-        .btn-sell:hover {
-            background-color: #218838;
-        }
-        .out-of-stock {
-            background-color: #f8d7da; /* Fila en rojo claro */
-        }
     </style>
 </head>
 <body>
-    <h1>Heladería</h1>
-
-    <h2>Lista de Productos</h2>
+    <h1>Lista de Productos</h1>
     <table>
         <thead>
             <tr>
@@ -71,11 +60,10 @@
                 <th>Costo Total</th>
                 <th>Profit</th>
                 <th>Ingredientes</th>
-                <th>Acción</th>
             </tr>
         </thead>
         <tbody>
-            {% for detail in products %}
+            {% for detail in product_details %}
             <tr {% if detail.product.id == best_profit_product.id %}style="background-color: #d4edda;"{% endif %}>
                 <td>{{ detail.product.name }}</td>
                 <td>{{ detail.product.selling_price }}</td>
@@ -86,48 +74,13 @@
                 <td>
                     <a href="/products/{{ detail.product.id }}/ingredients" class="btn">Ver Ingredientes</a>
                 </td>
-                <td>
-                    <form action="/products/{{ detail.product.id }}/vender" method="POST" style="display:inline;">
-                        <button type="submit" class="btn btn-sell">Vender</button>
-                    </form>
-                </td>
             </tr>
+       
             {% endfor %}
         </tbody>
     </table>
-
-    <h2>Lista de Ingredientes</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Precio</th>
-                <th>Calorías</th>
-                <th>Inventario</th>
-                <th>Vegetariano</th>
-                <th>Tipo</th>
-                <th>Sabor</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for ingredient in ingredients %}
-            <tr class="{% if ingredient.inventory <= 0 %}out-of-stock{% endif %}">
-                <td>{{ ingredient.name }}</td>
-                <td>{{ ingredient.price }}</td>
-                <td>{{ ingredient.calories }}</td>
-                <td>{{ ingredient.inventory }}</td> 
-                <td>{{ 'Sí' if ingredient.is_vegetarian else 'No' }}</td>
-                <td>{{ ingredient.ingredient_type }}</td>
-                <td>{% if ingredient.ingredient_type == 'Base' %}{{ ingredient.flavor }}{% else %}-{% endif %}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="/products/add" class="btn">Agregar un Producto</a>
-    <a href="/ingredients/add" class="btn">Agregar un Ingrediente</a>
-    <a href="/ingredients/" class="btn">Supply</a>
     
+    <a href="/products/add" class="btn">Agregar otro producto</a>
+    <a href="/index" class="btn">Inicio</a>
 </body>
 </html>
-    
