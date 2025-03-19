@@ -1,5 +1,7 @@
 from config.db import db
-
+from models.ingredient import Ingredient
+from models.product_ingredients import ProductIngredient
+from config.marshmallow import marshmallow
 
 class Product(db.Model):
     __tablename__ = 'product'
@@ -11,9 +13,8 @@ class Product(db.Model):
     cup_type = db.Column(db.String(50), nullable=False)
     volume = db.Column(db.String(50), nullable=False)
     
-
-    ingredients = db.relationship('Ingredient', secondary='product_ingredient')
-
+    ingredients = db.relationship('Ingredient', secondary='product_ingredient', backref="products")
+   
 def total_calories(product):
     ingredients = product.ingredients
     if product.product_type == "cup":
@@ -33,7 +34,6 @@ def profit(product):
     return  product.selling_price - sum(ingredient.price for ingredient in ingredients)
 
 def best_profit_product(product_details):
- 
     best_profit_product = None
     max_profit = -float('inf')
 
@@ -56,9 +56,18 @@ def sell_product(product):
         if ingredient.inventory <= 0:
             ingredientes_faltantes.append(ingredient.name)
         elif ingredient.inventory < 10:
-            ingredientes_faltantes.append(f"No hay suficiente inventario de {ingredient.name} para la venta")
+            ingredientes_faltantes.append(f"{ingredient.name}")
 
     if ingredientes_faltantes:
         return False,  ingredientes_faltantes
 
     return True, []
+
+
+class ProductSchema(marshmallow.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Product
+        load_instance = True
+        include_relationships = True
+        include_fk = True
+

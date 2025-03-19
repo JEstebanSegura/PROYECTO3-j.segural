@@ -14,7 +14,7 @@
             color: #fff;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
-        form {
+        .container {
             background: #fff;
             padding: 20px;
             border-radius: 15px;
@@ -36,25 +36,31 @@
             border-radius: 8px;
             box-sizing: border-box;
         }
-        button {
+        .btn {
             background-color: #d63384;
             color: white;
-            padding: 12px;
+            padding: 15px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             margin-top: 15px;
             transition: background 0.3s;
+            display: block;
+            width: 100%;
+            text-align: center;
+            font-size: 16px;
         }
-        button:hover {
+        .btn:hover {
             background-color: #b02a70;
         }
-        a {
-            display: block;
+        .btn-container {
             margin-top: 15px;
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
+            text-align: center;
+        }
+        .btn-container a {
+            display: inline-block;
+            width: auto;
+            padding: 15px 30px;
         }
         #cup_fields, #milkshake_fields {
             display: none;
@@ -63,34 +69,36 @@
 </head>
 <body>
     <h1>Agregar Producto</h1>
-    <form action="/products/add" method="POST">
-        <label>Nombre del producto:</label>
-        <input type="text" name="name" required><br>
+    <div class="container">
+        <form action="/products/add" method="POST">
+            <label>Nombre del producto:</label>
+            <input type="text" name="name" required><br>
 
-        <label>Precio de venta:</label>
-        <input type="text" name="selling_price" required><br>
-        
-        <label>Tipo de producto:</label>
-        <select name="product_type" id="product_type" required onchange="document.getElementById('cup_fields').style.display = this.value === 'cup' ? 'block' : 'none'; document.getElementById('milkshake_fields').style.display = this.value === 'milkshake' ? 'block' : 'none';">
-            <option value="">Seleccione...</option>
-            <option value="cup">Cup</option>
-            <option value="milkshake">Milkshake</option>
-        </select><br>
+            <label>Precio de venta:</label>
+            <input type="text" name="selling_price" required><br>
+            
+            <label>Tipo de producto:</label>
+            <select name="product_type" id="product_type" required onchange="document.getElementById('cup_fields').style.display = this.value === 'cup' ? 'block' : 'none'; document.getElementById('milkshake_fields').style.display = this.value === 'milkshake' ? 'block' : 'none';">
+                <option value="">Seleccione...</option>
+                <option value="cup">Cup</option>
+                <option value="milkshake">Milkshake</option>
+            </select><br>
 
-        <div id="cup_fields">
-            <label>Tipo de cup:</label>
-            <input type="text" name="cup_type"><br>
+            <div id="cup_fields">
+                <label>Tipo de cup:</label>
+                <input type="text" name="cup_type"><br>
+            </div>
+
+            <div id="milkshake_fields">
+                <label>Volumen (ml):</label>
+                <input type="text" name="volume"><br>
+            </div>
+            
+            <button type="submit" class="btn">Agregar</button>
+        </form>
+        <div class="btn-container">
+            <a href="/menu" class="btn">Menú</a>
         </div>
-
-        <div id="milkshake_fields">
-            <label>Volumen (ml):</label>
-            <input type="text" name="volume"><br>
-        </div>
-        
-        <button type="submit">Agregar</button>
-    </form>
-
-    <a href="/index" class="btn">Inicio</a> <!-- Botón de Inicio -->
-    <a href="/products/" class="btn">Ver productos</a>
+    </div>
 </body>
 </html>

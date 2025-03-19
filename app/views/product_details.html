@@ -42,9 +42,15 @@
             border-radius: 5px;
             transition: background 0.3s;
             display: inline-block;
+            border: none;
+            cursor: pointer;
         }
         .btn:hover {
             background-color: #b02a70;
+        }
+        .btn:disabled {
+            background-color: gray;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -82,7 +88,9 @@
                 <th>Vegetariano</th>
                 <th>Tipo</th>
                 <th>Sabor</th>
-                <th>Acciones</th>
+                {% if current_user.es_admin %}
+                    <th>Acciones</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -95,29 +103,33 @@
                     <td>{{ 'Sí' if ingredient.is_vegetarian else 'No' }}</td>
                     <td>{{ ingredient.ingredient_type }}</td>
                     <td>{% if ingredient.ingredient_type == 'Base' %}{{ ingredient.flavor }}{% else %}-{% endif %}</td>
-                    <td>
-                    <form action="/products/{{ product.id }}/remove_ingredient" method="POST">
-                        <input type="hidden" name="ingredient_id" value="{{ ingredient.id }}">
-                    <button type="submit" class="btn">Quitar</button>
-                    </form>
-                    </td>
+                    {% if current_user.es_admin %}
+                        <td>
+                            <form action="/products/{{ product.id }}/remove_ingredient" method="POST">
+                                <input type="hidden" name="ingredient_id" value="{{ ingredient.id }}">
+                                <button type="submit" class="btn">Quitar</button>
+                            </form>
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <h2>Agregar Ingrediente</h2>
-    <form action="/products/{{ product.id }}/add_ingredient" method="POST">
-        <select name="ingredient_id">
-            {% for ingrediente in all_ingredients %}
-            <option value="{{ ingrediente.id }}">{{ ingrediente.name }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit" class="btn">Agregar</button>
-    </form>
+    {% if current_user.es_admin %}
+        <h2>Agregar Ingrediente</h2>
+        <form action="/products/{{ product.id }}/add_ingredient" method="POST">
+            <select name="ingredient_id">
+                {% for ingrediente in all_ingredients %}
+                <option value="{{ ingrediente.id }}">{{ ingrediente.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn">Agregar</button>
+        </form>
+    {% endif %}
 
     <br>
-    <a href="/products/" class="btn">Volver a Productos</a>
-    <a href="/index" class="btn">Inicio</a> <!-- Botón de Inicio -->
+    <a href="/index" class="btn">Volver a Vender</a>
+    <a href="/menu" class="btn">Menú</a>
 </body>
 </html>

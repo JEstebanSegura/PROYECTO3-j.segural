@@ -1,17 +1,30 @@
 from flask import Blueprint, render_template, request, redirect, url_for
+from flask_login import login_user, current_user, logout_user, login_required
 from models.ingredient import Ingredient
 from config.db import db
 
+from config.auth import login_manager
+from models.user import User
+
+@login_manager.user_loader
+def load_user(user_id:int):
+    return User.query.get(user_id)
 
 ingredient_blueprint = Blueprint('ingredient_blueprint', __name__, url_prefix="/ingredients")
 
 @ingredient_blueprint.route('/')
+@login_required
 def show_ingredient():
     ingredients = Ingredient.query.all()
     return render_template('show_ingredients.html', ingredients=ingredients)
 
 @ingredient_blueprint.route('/add', methods=['GET', 'POST'])
+@login_required
 def add_ingredient():
+
+    if not current_user.es_admin:
+        return render_template('acceso_denegado.html')
+    
     if request.method == 'GET':
         return render_template('add_ingredients.html')
 
@@ -61,7 +74,12 @@ def add_ingredient():
     return redirect(url_for('ingredient_blueprint.show_ingredient'))
 
 @ingredient_blueprint.route("/<int:id>/suply", methods = ["POST"])
+@login_required
 def suplay_ingredient(id):
+
+    if not (current_user.es_admin or current_user.es_empleado):
+        return render_template('acceso_denegado.html')
+    
     ingredient = Ingredient.query.get_or_404(id)
     ingredient.suply()
     

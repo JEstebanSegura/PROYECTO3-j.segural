@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Usuario - Heladería</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+        }
+        h1 {
+            color: #d63384;
+        }
+        .btn {
+            background-color: #d63384;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background 0.3s;
+            display: block;
+            margin: 10px auto;
+            width: 200px;
+        }
+        .btn:hover {
+            background-color: #b02a70;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenido a la Heladería</h1>
+        <h2>Usuario: {{ current_user.username }}</h2>
+        <h3>Rol: 
+            {% if current_user.es_admin %} Administrador {% elif current_user.es_empleado %} Empleado {% else %} Cliente {% endif %}
+        </h3>
+        <a href="/products" class="btn">Ver Productos</a>
+        <a href="/ingredients" class="btn">Ver Ingredientes</a>
+
+        {% if current_user.es_admin %}
+            <a href="/products/add" class="btn">Agregar Producto</a>
+            <a href="/ingredients/add" class="btn">Agregar Ingrediente</a>
+        {% endif %}
+
+        {% if current_user.es_admin or current_user.es_empleado %}
+            <a href="/index" class="btn">Realizar Venta</a>
+        {% endif %}
+
+        <a href="/auth/logout" class="btn">Cerrar Sesión</a>
+    </div>
+</body>
+</html>

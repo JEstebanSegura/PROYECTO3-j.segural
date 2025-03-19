@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Heladería</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 80%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #d63384;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f8d7da;
+        }
+        .btn {
+            background-color: #d63384;
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background 0.3s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #b02a70;
+        }
+        .btn-sell {
+            background-color: #28a745;
+            padding: 6px 10px;
+            width: 100%;
+            display: block;
+        }
+        .btn-sell:hover {
+            background-color: #218838;
+        }
+        .buttons-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .buttons-container a {
+            margin: 5px;
+        }
+        td form {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Heladería</h1>
+
+    <p>
+        Usuario: 
+        {% if user_role != "guest" %}
+            <strong>{{ current_user.username }}</strong> ({{ user_role }})
+        {% else %}
+            <strong>Cliente</strong>
+        {% endif %}
+    </p>
+
+    <h2>Vender Productos</h2>
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Precio de Venta</th>
+                    <th>Tipo</th>
+                    <th>Calorías Totales</th>
+                    <th>Costo Total</th>
+                    <th>Profit</th>
+                    <th>Ingredientes</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detail in products %}
+                <tr {% if detail.product.id == best_profit_product.id %}style="background-color: #d4edda;"{% endif %}>
+                    <td>{{ detail.product.name }}</td>
+                    <td>{{ detail.product.selling_price }}</td>
+                    <td>{{ detail.product.product_type }}</td>
+                    <td>{{ detail.total_calories }}</td>
+                    <td>{{ detail.total_cost }}</td>
+                    <td>{{ detail.profit }}</td>
+                    <td>
+                        <a href="/products/{{ detail.product.id }}/ingredients" class="btn">Ver Ingredientes</a>
+                    </td>
+                    <td>
+                        <form action="/products/{{ detail.product.id }}/vender" method="POST">
+                            <button type="submit" class="btn btn-sell">
+                                {% if user_role == 'admin' or user_role == 'empleado' %}
+                                    Vender
+                                {% else %}
+                                    Comprar
+                                {% endif %}    
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="buttons-container">
+        <a href="/menu" class="btn">Menú</a>
+    </div>
+</body>
+</html>

@@ -14,18 +14,24 @@
             color: #fff;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
         table {
-            width: 80%;
-            margin: auto;
+            width: 100%;
             border-collapse: collapse;
             background: #fff;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             overflow: hidden;
         }
         th, td {
             padding: 12px;
             border-bottom: 1px solid #ddd;
+            text-align: center;
         }
         th {
             background-color: #d63384;
@@ -33,6 +39,9 @@
         }
         tr:hover {
             background-color: #f8d7da;
+        }
+        .best-profit {
+            background-color: #d4edda;
         }
         .btn {
             background-color: #d63384;
@@ -42,45 +51,56 @@
             border-radius: 5px;
             transition: background 0.3s;
             display: inline-block;
+            border: none;
+            cursor: pointer;
         }
         .btn:hover {
             background-color: #b02a70;
+        }
+        .buttons-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .buttons-container a {
+            margin: 5px;
         }
     </style>
 </head>
 <body>
     <h1>Lista de Productos</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Precio de Venta</th>
-                <th>Tipo</th>
-                <th>Calorías Totales</th>
-                <th>Costo Total</th>
-                <th>Profit</th>
-                <th>Ingredientes</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for detail in product_details %}
-            <tr {% if detail.product.id == best_profit_product.id %}style="background-color: #d4edda;"{% endif %}>
-                <td>{{ detail.product.name }}</td>
-                <td>{{ detail.product.selling_price }}</td>
-                <td>{{ detail.product.product_type }}</td>
-                <td>{{ detail.total_calories }}</td>
-                <td>{{ detail.total_cost }}</td>
-                <td>{{ detail.profit }}</td>
-                <td>
-                    <a href="/products/{{ detail.product.id }}/ingredients" class="btn">Ver Ingredientes</a>
-                </td>
-            </tr>
-       
-            {% endfor %}
-        </tbody>
-    </table>
-    
-    <a href="/products/add" class="btn">Agregar otro producto</a>
-    <a href="/index" class="btn">Inicio</a>
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Precio de Venta</th>
+                    <th>Tipo</th>
+                    <th>Calorías Totales</th>
+                    <th>Costo Total</th>
+                    <th>Profit</th>
+                    <th>Ingredientes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detail in product_details %}
+                <tr class="{% if detail.product.id == best_profit_product.id %}best-profit{% endif %}">
+                    <td>{{ detail.product.name }}</td>
+                    <td>{{ detail.product.selling_price }}</td>
+                    <td>{{ detail.product.product_type }}</td>
+                    <td>{{ detail.total_calories }}</td>
+                    <td>{{ detail.total_cost }}</td>
+                    <td>{{ detail.profit }}</td>
+                    <td>
+                        <a href="/products/{{ detail.product.id }}/ingredients" class="btn">Ver Ingredientes</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="buttons-container">
+            <a href="/products/add" class="btn">Agregar otro producto</a>
+            <a href="/menu" class="btn">Menú</a>
+        </div>
+    </div>
 </body>
 </html>

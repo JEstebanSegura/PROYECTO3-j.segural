@@ -1,4 +1,5 @@
 from config.db import db
+from config.marshmallow import marshmallow
 
 class Ingredient(db.Model):
     __tablename__ = 'ingredient'
@@ -19,3 +20,9 @@ class Ingredient(db.Model):
         self.inventory += 5
         return self
     
+class IngredientSchema(marshmallow.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Ingredient
+        load_instance = True
+        include_relationships = True
+        include_fk = True

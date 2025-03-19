@@ -14,13 +14,18 @@
             color: #fff;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
         table {
-            width: 80%;
-            margin: auto;
+            width: 100%;
             border-collapse: collapse;
             background: #fff;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             overflow: hidden;
         }
         th, td {
@@ -49,67 +54,61 @@
         .btn:hover {
             background-color: #b02a70;
         }
-        a {
-            display: inline-block;
-            margin-top: 15px;
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-            background-color: #d63384;
-            padding: 10px 15px;
-            border-radius: 8px;
-            transition: background 0.3s;
+        .buttons-container {
+            margin-top: 20px;
+            text-align: center;
         }
-        a:hover {
-            background-color: #b02a70;
+        .buttons-container a {
+            margin: 5px;
         }
-        
-        /* Nueva clase para marcar los ingredientes sin inventario */
         .out-of-stock {
             background-color: #f8d7da;
             color: #721c24;
-            text-decoration: line-through; /* Tachado */
+            text-decoration: line-through;
         }
     </style>
 </head>
 <body>
     <h1>Lista de Ingredientes</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Precio</th>
-                <th>Calorías</th>
-                <th>Inventario</th>
-                <th>Vegetariano</th>
-                <th>Tipo</th>
-                <th>Sabor</th>
-                <th>Saludable</th> <!-- Nueva columna -->
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for ingredient in ingredients %}
-            <tr class="{% if ingredient.inventory <= 0 %}out-of-stock{% endif %}">
-                <td>{{ ingredient.name }}</td>
-                <td>{{ ingredient.price }}</td>
-                <td>{{ ingredient.calories }}</td>
-                <td>{{ ingredient.inventory }}</td>
-                <td>{{ 'Sí' if ingredient.is_vegetarian else 'No' }}</td>
-                <td>{{ ingredient.ingredient_type }}</td>
-                <td>{% if ingredient.ingredient_type == 'Base' %}{{ ingredient.flavor }}{% else %}-{% endif %}</td>
-                <td>{{ 'Sí' if ingredient.calories < 100 and ingredient.is_vegetarian else 'No' }}</td> <!-- Saludable -->
-                <td>
-                    <form action="/ingredients/{{ ingredient.id }}/suply" method="POST" style="display:inline;">
-                        <button type="submit" class="btn">Supply</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
-    <a href="/ingredients/add">Agregar otro ingrediente</a>
-    <a href="/index" class="btn">Inicio</a>
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Calorías</th>
+                    <th>Inventario</th>
+                    <th>Vegetariano</th>
+                    <th>Tipo</th>
+                    <th>Sabor</th>
+                    <th>Saludable</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ingredient in ingredients %}
+                <tr class="{% if ingredient.inventory <= 0 %}out-of-stock{% endif %}">
+                    <td>{{ ingredient.name }}</td>
+                    <td>{{ ingredient.price }}</td>
+                    <td>{{ ingredient.calories }}</td>
+                    <td>{{ ingredient.inventory }}</td>
+                    <td>{{ 'Sí' if ingredient.is_vegetarian else 'No' }}</td>
+                    <td>{{ ingredient.ingredient_type }}</td>
+                    <td>{% if ingredient.ingredient_type == 'Base' %}{{ ingredient.flavor }}{% else %}-{% endif %}</td>
+                    <td>{{ 'Sí' if ingredient.calories < 100 and ingredient.is_vegetarian else 'No' }}</td>
+                    <td>
+                        <form action="/ingredients/{{ ingredient.id }}/suply" method="POST" style="display:inline;">
+                            <button type="submit" class="btn">Supply</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="buttons-container">
+            <a href="/ingredients/add" class="btn">Agregar otro ingrediente</a>
+            <a href="/menu" class="btn">Menú</a>
+        </div>
+    </div>
 </body>
 </html>

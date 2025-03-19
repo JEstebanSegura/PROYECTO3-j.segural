@@ -1,35 +1,49 @@
 from flask import Blueprint, render_template, request, redirect, url_for
+from flask_login import login_user, current_user, logout_user, login_required
 from models.product import Product, total_calories, total_cost, profit, best_profit_product, sell_product
 from models.ingredient import Ingredient
 from models.product_ingredients import ProductIngredient
 from config.db import db
+from config.auth import login_manager
+from models.user import User
 
 product_blueprint = Blueprint('product_blueprint', __name__, url_prefix="/products")
 
+@login_manager.user_loader
+def load_user(user_id:int):
+    return User.query.get(user_id)
+
 @product_blueprint.route('/')
+@login_required
 def show_products():
     products = Product.query.all()
     product_details = []
     
     for product in products:
-        product_details.append({
+        details = {
             'product': product,
             'total_calories': total_calories(product),
             'total_cost': total_cost(product),
-            'profit': profit(product)
-        })
+        }
+        
+        if current_user.es_admin:
+            details['profit'] = profit(product)
+        
+        product_details.append(details)
     
-    best_profit_product_obj = best_profit_product(product_details)
+    if current_user.es_admin:
+        best_profit_product_obj = best_profit_product(product_details)
+    else:
+        best_profit_product_obj = None
 
     return render_template('show_products.html', product_details=product_details, best_profit_product=best_profit_product_obj)
 
-@product_blueprint.route("/<int:id>", methods = ["GET"])
-def get_product(id):
-    product =  Product.query.get_or_404(id)
-    return render_template ("prodcut.html", perro = product)
-
 @product_blueprint.route('/add', methods=['GET', 'POST'])
+@login_required
 def add_product():
+    if not current_user.es_admin:
+        return render_template('acceso_denegado.html')
+
     if request.method == 'GET':
         return render_template('add_product.html')
 
@@ -65,6 +79,7 @@ def get_ingredients(product_id):
     return render_template("product_details.html", product=product, ingredients=ingredients, all_ingredients =all_ingredients, total_calories=total_calories, total_cost=total_cost )
 
 @product_blueprint.route('/<int:product_id>/add_ingredient', methods=['POST'])
+@login_required
 def add_ingredient(product_id):
     ingredient_id = request.form.get("ingredient_id")
 
@@ -81,6 +96,7 @@ def add_ingredient(product_id):
     return get_ingredients(product_id)
     
 @product_blueprint.route('/<int:product_id>/remove_ingredient', methods=['POST'])
+@login_required
 def remove_ingredient(product_id):
     ingredient_id = request.form.get("ingredient_id")
 
